@@ -1,0 +1,6 @@
+{
+  "name": "server",
+  "scripts": {
+    "flask": "flask run"
+  }
+}
