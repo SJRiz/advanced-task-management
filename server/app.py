@@ -7,6 +7,18 @@ from models import Task, User, Group, GroupMember
 # Used to hash passwords
 bcrypt = Bcrypt(app)
 
+# Used to see if the user is in the group
+def check_membership(user_id, group_id):
+    # Check if the group exists
+    group = Group.query.get(group_id)
+    if not group:
+        return jsonify({"message": "Group not found"}), 404
+
+    # Check if the user is already a member
+    existing_member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
+    if not existing_member:
+        return jsonify({"message": "You are not in this group"}), 403
+
 # Route to create a new user
 @app.route("/register", methods=["POST"])
 def register_user():
@@ -129,14 +141,10 @@ def join_group(id):
 def leave_group(id):
     user_id = get_jwt_identity()
     try:
+        check_membership(user_id=user_id, group_id=id)
+
         group = Group.query.get(id)
-        if not group:
-            return jsonify({"message": "Group not found"}), 404
-        
         existing_member = GroupMember.query.filter_by(user_id=user_id, group_id=id).first()
-        if not existing_member:
-            return jsonify({"message": "You are not in this group"}), 403
-        
         db.session.delete(existing_member)
         db.session.commit()
 
@@ -151,32 +159,36 @@ def leave_group(id):
         return jsonify({"message": str(err)}), 400
 
 ############################## TASK API ##################################
-# Get/Read method to get all the tasks made by the user
-@app.route("/tasks", methods=["GET"])
+# Get/Read method to get all the tasks made by a group
+@app.route("/groups/<int:group_id>/tasks", methods=["GET"])
 @jwt_required()
-def get_tasks():
+def get_tasks(group_id):
+    user_id = get_jwt_identity()
     try:
-        user_id = get_jwt_identity()
-        tasks = Task.query.filter_by(user_id=user_id).all()
-        tasks_list = [x.to_dict() for x in tasks]
+        check_membership(user_id=user_id, group_id=group_id)
+
+        tasks = Task.query.filter_by(group_id=group_id).all()
+        tasks_list = [task.to_dict() for task in tasks]
         return jsonify({"tasks": tasks_list})
     
     except Exception as err:
         return jsonify({"message": str(err)}), 400
+
     
 # Post/Create method to create a task associated with the user
-@app.route("/tasks", methods=["POST"])
+@app.route("/groups/<int:group_id>/tasks", methods=["POST"])
 @jwt_required()
-def create_task():
+def create_task(group_id):
+    user_id = get_jwt_identity()
     try:
-        user_id = get_jwt_identity()
+        check_membership(user_id=user_id, group_id=group_id)
 
         data = request.json
         task_desc = data.get("taskDesc")
         if not task_desc:
             return jsonify({"message": "Invalid task"}), 400
         
-        new_task = Task(task_desc=task_desc, user_id=user_id)
+        new_task = Task(task_desc=task_desc, creator_id=user_id, group_id=group_id)
         db.session.add(new_task)
         db.session.commit()
 
@@ -189,32 +201,32 @@ def create_task():
         return jsonify({"message": str(err)}), 400
 
 # Patch/Update method to update a task description
-@app.route("/tasks/<int:id>", methods=["PATCH"])
+@app.route("/groups/<int:group_id>/tasks/<int:id>", methods=["PATCH"])
 @jwt_required()
-def update_task(id):
+def update_task(group_id, id):
+    user_id = get_jwt_identity()
     try:
-        user_id = get_jwt_identity()
-
+        check_membership(user_id=user_id, group_id=group_id)
         task = Task.query.get(id)
-        if not task or task.user_id != user_id:
+        if not task or task.user_id != user_id or task.group_id != group_id:
             return jsonify({"message": "Task not found"}), 404
         
         task.task_desc = request.json.get("taskDesc", task.task_desc)
         db.session.commit()
-        return jsonify({})
+        return jsonify(task.to_dict()), 200
     
     except Exception as err:
         return jsonify({"message": str(err)}), 400
 
 # Delete method to delete a task associated with a user
-@app.route("/tasks/<int:id>", methods=["DELETE"])
+@app.route("/groups/<int:group_id>/tasks/<int:id>", methods=["DELETE"])
 @jwt_required()
-def delete_task(id):
+def delete_task(group_id, id):
+    user_id = get_jwt_identity()
     try:
-        user_id = get_jwt_identity()
-
+        check_membership(user_id=user_id, group_id=group_id)
         task = Task.query.get(id)
-        if not task or task.user_id != user_id:
+        if not task or task.user_id != user_id or task.group_id != group_id:
             return jsonify({"message": "Task not found"}), 404
         
         db.session.delete(task)
