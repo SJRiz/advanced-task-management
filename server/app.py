@@ -26,11 +26,13 @@ def check_membership(user_id, group_id):
 def join_handler(data):
     group_id = data['group_id']
     join_room(str(group_id))
+    print("user joined")
 
 @socketio.on('leave_group')
 def leave_handler(data):
     group_id = data['group_id']
     leave_room(str(group_id))
+    print("user left")
 
 ############################## AUTH API ##################################
 # Route to create a new user

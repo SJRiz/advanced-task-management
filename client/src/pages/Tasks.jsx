@@ -4,23 +4,45 @@ import { useNavigate } from 'react-router-dom';
 import api from '../axiosConfig'
 import { TaskForm } from '../components/TaskForm'
 import { TaskList } from '../components/TaskList'
+import { io } from 'socket.io-client'
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([])
-  const [refresh, setRefresh] = useState(0)
   const location = useLocation()
   const groupId = location.state?.groupId
   const navigate = useNavigate()
 
+  // Fetch initial tasks
   useEffect(() => {
     api.get(`/groups/${groupId}/tasks`)
       .then(res => setTasks(res.data.tasks))
       .catch(err => console.log(err))
-  }, [refresh])
+  }, [])
+
+  // Setup SocketIO connections and listeners
+  useEffect(() => {
+    if (!groupId) return
+
+    const socket = io(import.meta.env.VITE_API_BASE_URL)
+    socket.emit('join_group', {group_id: groupId})
+
+    // When any tasks are added to the server, refetch
+    socket.on('task_changed', () => {
+       api.get(`/groups/${groupId}/tasks`)
+      .then(res => setTasks(res.data.tasks))
+      .catch(err => console.log(err))
+      console.log("change detected")
+    })
+
+    return () => {
+      socket.emit('leave_group', {group_id: groupId})
+      socket.disconnect()
+    }
+  }, [groupId])
 
   function addTask(task) {
     api.post(`/groups/${groupId}/tasks`, { taskDesc: task })
-      .then(() => setRefresh(prev => prev + 1))
+      .then()
       .catch(err => console.log(err))
   }
 
@@ -29,7 +51,7 @@ export default function Tasks() {
       ? api.patch(`/groups/${groupId}/tasks/${task.id}`, { taskDesc: newTxt })
       : api.delete(`/groups/${groupId}/tasks/${task.id}`)
 
-    request.then(() => setRefresh(prev => prev + 1)).catch(console.log)
+    request.then().catch(console.log)
   }
 
   function exit() {
@@ -40,6 +62,7 @@ export default function Tasks() {
     <div>
       <TaskForm addTask={addTask} />
       <TaskList tasks={tasks} editTask={editTask} />
+      <p>Group ID: {groupId} </p>
       <button id="btn" onClick={exit}>Back</button>
     </div>
   )

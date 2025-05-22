@@ -23,6 +23,7 @@ export function GroupForm({addGroup, joinGroup, error}) {
                 <form onSubmit={handleAdd}>
                     <input type="text"
                     value={addTxt}
+                    placeholder="My Group"
                     onChange={e => setAddTxt(e.target.value)}/>
                 </form>
             </div>
@@ -31,6 +32,7 @@ export function GroupForm({addGroup, joinGroup, error}) {
                 <form onSubmit={handleJoin}>
                     <input type="text"
                     value={joinTxt}
+                    placeholder="Enter Group ID"
                     onChange={e => setJoinTxt(e.target.value)}/>
                 </form>
             </div>

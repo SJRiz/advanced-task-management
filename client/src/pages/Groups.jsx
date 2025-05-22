@@ -33,6 +33,10 @@ export default function Groups() {
         setError(msg)})
     }
 
+    function leaveGroup(groupId) {
+        setGroups(prevGroups => prevGroups.filter(g => g.id !== groupId));
+    }
+
     function enterGroup(groupId) {
         navigate("/tasks", { state: {groupId} })
     }
@@ -40,7 +44,7 @@ export default function Groups() {
     return (
         <div>
             <GroupForm addGroup={addGroup} joinGroup={joinGroup} error={error}/>
-            <GroupList groups={groups} enterGroup={enterGroup}/>
+            <GroupList groups={groups} enterGroup={enterGroup} onLeave={leaveGroup}/>
         </div>
     )
 

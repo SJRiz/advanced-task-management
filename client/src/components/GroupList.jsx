@@ -1,6 +1,6 @@
 import {GroupItem} from "./GroupItem"
 
-export function GroupList({groups, enterGroup}) {
+export function GroupList({groups, enterGroup, onLeave}) {
     return (
         <div>
             <ul>
@@ -12,6 +12,7 @@ export function GroupList({groups, enterGroup}) {
                             <GroupItem
                             group={group}
                             key={group.id}
+                            onLeave={onLeave}
                             enterGroup={enterGroup}/>
                         )
                     }))

@@ -17,10 +17,11 @@ export default function Register() {
         setError("");
 
         try {
-        const res = await axios.api("/register", form);
+        const res = await api.post("/register", form);
         navigate("/login"); // redirect after registration
         } catch (err) {
             alert("Sign In Failed")
+            console.log(err)
         }
   };
 
