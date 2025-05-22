@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from '../axiosConfig'
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -17,7 +17,7 @@ export default function Register() {
         setError("");
 
         try {
-        const res = await axios.post("https://task-management-1dlj.onrender.com/register", form);
+        const res = await axios.api("/register", form);
         navigate("/login"); // redirect after registration
         } catch (err) {
             alert("Sign In Failed")

@@ -224,7 +224,7 @@ def update_task(group_id, id):
     try:
         check_membership(user_id=user_id, group_id=group_id)
         task = Task.query.get(id)
-        if not task or task.user_id != user_id or task.group_id != group_id:
+        if not task or task.group_id != group_id:
             return jsonify({"message": "Task not found"}), 404
         
         task.task_desc = request.json.get("taskDesc", task.task_desc)
@@ -245,7 +245,7 @@ def delete_task(group_id, id):
     try:
         check_membership(user_id=user_id, group_id=group_id)
         task = Task.query.get(id)
-        if not task or task.user_id != user_id or task.group_id != group_id:
+        if not task or task.group_id != group_id:
             return jsonify({"message": "Task not found"}), 404
         
         db.session.delete(task)

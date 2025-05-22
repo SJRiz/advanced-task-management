@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../axiosConfig'
 import { useNavigate } from 'react-router-dom';
 
 export default function Login({setIsLoggedIn, setSavedEmail}) {
@@ -10,7 +10,7 @@ export default function Login({setIsLoggedIn, setSavedEmail}) {
     const handleLogin = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post("https://task-management-1dlj.onrender.com/login", { email, password })
+            const res = await api.post("/login", { email, password })
             const token = res.data.access_token
             localStorage.setItem("token", token)
             localStorage.setItem("email", email)

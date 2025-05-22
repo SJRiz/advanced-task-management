@@ -9,7 +9,7 @@ export function TaskForm({addTask}){
         e.preventDefault()
         addTask(txt)
         setTxt("")
-      }
+    }
 
     return (
         <div className="border-b-1 border-t mt-3 p-2 border-gray-500">

@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import Tasks from './pages/Tasks'
 import Login from './pages/Login'
 import Register from "./pages/Register";
+import Groups from './pages/Groups';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"))
@@ -49,7 +50,8 @@ function App() {
         border-1 border-gray-700">Task Manager</p>
 
         <Routes>
-          <Route path="/" element={<Tasks />} />
+          <Route path="/" element={<Groups />} />
+          <Route path="/tasks" element={<Tasks />}/>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setSavedEmail={setSavedEmail}/>} />
         </Routes>

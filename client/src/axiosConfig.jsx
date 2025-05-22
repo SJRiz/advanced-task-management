@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://task-management-1dlj.onrender.com',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000',
 });
 
 // Request Interceptor: Attach JWT token
@@ -21,7 +21,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      console.warn('Unauthorized, logging out...');
+      console.warn('Unauthorized, logging out');
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
