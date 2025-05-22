@@ -137,7 +137,7 @@ def join_group(id):
         # Check if the user is already a member
         existing_member = GroupMember.query.filter_by(user_id=user_id, group_id=id).first()
         if existing_member:
-            return jsonify({"message": "User is already in this group"}), 400
+            return jsonify({"message": "You are already in this group"}), 400
 
         # Add the new group member
         new_member = GroupMember(user_id=user_id, group_id=id)

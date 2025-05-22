@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import api from '../axiosConfig'
 import { TaskForm } from '../components/TaskForm'
 import { TaskList } from '../components/TaskList'
@@ -9,6 +10,7 @@ export default function Tasks() {
   const [refresh, setRefresh] = useState(0)
   const location = useLocation()
   const groupId = location.state?.groupId
+  const navigate = useNavigate()
 
   useEffect(() => {
     api.get(`/groups/${groupId}/tasks`)
@@ -30,10 +32,15 @@ export default function Tasks() {
     request.then(() => setRefresh(prev => prev + 1)).catch(console.log)
   }
 
+  function exit() {
+    navigate("/")
+  }
+
   return (
     <div>
       <TaskForm addTask={addTask} />
       <TaskList tasks={tasks} editTask={editTask} />
+      <button id="btn" onClick={exit}>Back</button>
     </div>
   )
 }

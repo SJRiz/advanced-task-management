@@ -46,8 +46,6 @@ function App() {
             </>
           )}
         </nav>
-        <p className="mb-1 text-4xl bg-gr bg-gradient-to-br from-gray-950 to-gray-900 rounded-3xl p-4
-        border-1 border-gray-700">Task Manager</p>
 
         <Routes>
           <Route path="/" element={<Groups />} />

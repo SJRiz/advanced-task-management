@@ -14,19 +14,23 @@ export default function Groups() {
     useEffect(() => {
         api.get("/groups")
         .then(res => setGroups(res.data.groups))
-        .catch(err => setError(err))
+        .catch(err => {console.log(err)})
     }, [refresh])
 
     function addGroup(groupName) {
         api.post("/groups", { name: groupName })
         .then(() => setRefresh(prev => prev + 1))
-        .catch(err => setError(err))
+        .catch(err => {
+        const msg = err.response?.data?.message || "Failed to make group"
+        setError(msg)})
     }
 
     function joinGroup(groupId) {
         api.post(`/groups/${groupId}`)
         .then(() => setRefresh(prev => prev + 1))
-        .catch(err => setError(err))
+        .catch(err => {
+        const msg = err.response?.data?.message || "Failed to join group"
+        setError(msg)})
     }
 
     function enterGroup(groupId) {
