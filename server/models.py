@@ -52,5 +52,6 @@ class Task(db.Model):
             "id": self.id,
             "taskDesc": self.task_desc,
             "completed": self.completed,
+            "creator": self.creator.email,
             "groupId": self.group_id
         }
