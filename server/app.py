@@ -1,7 +1,8 @@
 from flask import request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
-from config import app, db, jwt
+from flask_socketio import join_room, leave_room
+from config import app, db, socketio
 from models import Task, User, Group, GroupMember
 
 # Used to hash passwords
@@ -19,6 +20,19 @@ def check_membership(user_id, group_id):
     if not existing_member:
         return jsonify({"message": "You are not in this group"}), 403
 
+############################## LISTENERS ##################################
+
+@socketio.on('join_group')
+def join_handler(data):
+    group_id = data['group_id']
+    join_room(str(group_id))
+
+@socketio.on('leave_group')
+def leave_handler(data):
+    group_id = data['group_id']
+    leave_room(str(group_id))
+
+############################## AUTH API ##################################
 # Route to create a new user
 @app.route("/register", methods=["POST"])
 def register_user():
@@ -192,6 +206,8 @@ def create_task(group_id):
         db.session.add(new_task)
         db.session.commit()
 
+        socketio.emit('task_changed', room=str(group_id))
+
         return jsonify({
             "id": new_task.id,
             "taskDesc": new_task.task_desc
@@ -213,6 +229,9 @@ def update_task(group_id, id):
         
         task.task_desc = request.json.get("taskDesc", task.task_desc)
         db.session.commit()
+
+        socketio.emit('task_changed', room=str(group_id))
+
         return jsonify(task.to_dict()), 200
     
     except Exception as err:
@@ -231,6 +250,9 @@ def delete_task(group_id, id):
         
         db.session.delete(task)
         db.session.commit()
+
+        socketio.emit('task_changed', room=str(group_id))
+
         return jsonify({})
     
     except Exception as err:
@@ -240,4 +262,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
 
-    app.run(debug=True)
+    socketio.run(app, debug=True)
