@@ -51,7 +51,7 @@ export default function Tasks() {
       ? api.patch(`/groups/${groupId}/tasks/${task.id}`, { taskDesc: newTxt })
       : api.delete(`/groups/${groupId}/tasks/${task.id}`)
 
-    request.then().catch(console.log)
+    request.then().catch(err => console.log(err))
   }
 
   function exit() {

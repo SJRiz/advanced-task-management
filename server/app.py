@@ -230,6 +230,7 @@ def update_task(group_id, id):
             return jsonify({"message": "Task not found"}), 404
         
         task.task_desc = request.json.get("taskDesc", task.task_desc)
+        task.completed = request.json.get("completed", task.completed)
         db.session.commit()
 
         socketio.emit('task_changed', room=str(group_id))

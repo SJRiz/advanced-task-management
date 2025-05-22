@@ -39,6 +39,7 @@ class Task(db.Model):
     __tablename__ = "tasks"
     id = db.Column(db.Integer, primary_key=True)
     task_desc = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False, nullable=False)
 
     creator_id = db.Column(db.String(345), db.ForeignKey("users.id"), nullable=False)
     creator = db.relationship("User", backref="created_tasks")
@@ -50,5 +51,6 @@ class Task(db.Model):
         return {
             "id": self.id,
             "taskDesc": self.task_desc,
+            "completed": self.completed,
             "groupId": self.group_id
         }
