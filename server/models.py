@@ -31,7 +31,7 @@ class GroupMember(db.Model):
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
 
-    user = db.relationship("Users", backref="group_memberships")
+    user = db.relationship("User", backref="group_memberships")
     group = db.relationship("Group", backref="members")
 
 # Task model that will be stored in the database
@@ -43,7 +43,7 @@ class Task(db.Model):
     creator_id = db.Column(db.String(345), db.ForeignKey("users.id"), nullable=False)
     creator = db.relationship("User", backref="created_tasks")
 
-    group_id = db.Column(db.String(32), db.ForeignKey('groups.id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
     group = db.relationship("Group", backref="tasks")
 
     def to_dict(self):

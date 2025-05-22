@@ -55,7 +55,7 @@ def login_user():
     if user is None or not bcrypt.check_password_hash(user.password, password):
         return jsonify({"message": "Unauthorized"}), 401
 
-    # Return an access token that can be used to access ur own tasks
+    # Return an access token that can be used to access ur groups
     access_token = create_access_token(identity=user.id)
     return jsonify({
     "access_token": access_token,
@@ -240,4 +240,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
 
-    app.run()
+    app.run(debug=True)
