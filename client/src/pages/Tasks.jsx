@@ -62,7 +62,7 @@ export default function Tasks() {
     <div>
       <TaskForm addTask={addTask} />
       <TaskList tasks={tasks} editTask={editTask} />
-      <p>Group ID: {groupId} </p>
+      <p className='mb-2'>Group ID: {groupId} </p>
       <button id="btn" onClick={exit}>Back</button>
     </div>
   )

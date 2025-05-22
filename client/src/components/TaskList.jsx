@@ -16,7 +16,7 @@ export function TaskList({ tasks, editTask }) {
                 )
                 })}
             </ul>) :
-            (<p className="mt-3">No tasks</p>)
+            (<p className="mt-3 mb-3">No tasks</p>)
             }
         </div>
     )
