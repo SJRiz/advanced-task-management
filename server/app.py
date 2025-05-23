@@ -274,7 +274,10 @@ def delete_task(group_id, id):
         return jsonify({"message": str(err)}), 400
 
 if __name__ == "__main__":
+    import eventlet
+    eventlet.monkey_patch()
+
     with app.app_context():
         db.create_all()
 
-    socketio.run(app)
+    socketio.run(app, host="0.0.0.0", port=5000)
