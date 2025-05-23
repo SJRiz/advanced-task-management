@@ -167,9 +167,10 @@ def leave_group(id):
         db.session.commit()
 
         # If the group has no members, then delete the group
-        if len(group.members) == 0:
+        if not group.members:
             db.session.delete(group)
             db.session.commit()
+            print("deleted empty group")
 
         return jsonify({"message": "Success"}), 204
 
@@ -276,4 +277,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
 
-    socketio.run(app, debug=True)
+    socketio.run(app)
