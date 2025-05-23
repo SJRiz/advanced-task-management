@@ -24,6 +24,7 @@ class Group(db.Model):
             "name": self.name,
             "members": [
                 {
+                    "userId": member.user.id,
                     "email": member.user.email
                 } for member in self.members
             ]

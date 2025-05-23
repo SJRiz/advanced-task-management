@@ -1,7 +1,7 @@
 import api from '../axiosConfig'
 
 export function GroupItem({group, enterGroup, onLeave}) {
-    
+
     function leaveGroup(groupId) {
         api.delete(`/groups/${groupId}`).then(() => onLeave(groupId)).catch(err => {console.log(err)})
     }
@@ -15,8 +15,8 @@ export function GroupItem({group, enterGroup, onLeave}) {
                 <button onClick={() => leaveGroup(group.id)} id="btn">Leave</button>
             </div>
             </div>
-            <p className='text-left text-xs'>Members: {group.members.map((member) => {
-                return <>{member.email} </>
+            <p className='text-left text-xs'> <u>Members:</u> {group.members.map((member) => {
+                return (<span key={member.userId}>{member.email} </span>)
             })} </p>
         </li>
     )
