@@ -8,8 +8,8 @@ export function GroupItem({group, enterGroup, onLeave}) {
 
     return (
         <li>
-            <div className="flex items-center justify-between w-full border-b p-2">
-            <p>{group.name}</p>
+            <div className="flex items-center justify-between w-full border-b p-2 mt-3">
+            <p className='flex-grow text-left break-words whitespace-normal w-45'>{group.name}</p>
             <div className="flex space-x-0 text">
                 <button onClick={() => enterGroup(group.id)} id="btn">Enter</button>
                 <button onClick={() => leaveGroup(group.id)} id="btn">Leave</button>

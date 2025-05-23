@@ -48,7 +48,7 @@ export function TaskItem({ task, editTask }) {
           </>
         )}
       </div>
-      <p className='text-left mb-2'>Created by: {task.creator}</p>
+      <p className='text-left mb-2 text-xs'>Created by: {task.creator}</p>
     </li>
   );
 }

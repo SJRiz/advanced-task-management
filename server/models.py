@@ -1,9 +1,14 @@
 from config import db
 from uuid import uuid4
+from random import randint
 
-# Creates an ID
+# Creates a user ID
 def get_uuid():
     return uuid4().hex
+
+# Creates an 8 digit ID
+def get_rnum():
+    return randint(10**7, 10**8 - 1)
 
 # User model created from log in
 class User(db.Model):
@@ -15,7 +20,7 @@ class User(db.Model):
 # Group model that will be linked to the tasks, and holds group members
 class Group(db.Model):
     __tablename__ = "groups"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True, unique=True, default=get_rnum)
     name = db.Column(db.String(100))
 
     def to_dict(self):
@@ -33,7 +38,7 @@ class Group(db.Model):
 # Group member model that is part of the group model
 class GroupMember(db.Model):
     __tablename__ = "group_members"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
 
@@ -43,7 +48,7 @@ class GroupMember(db.Model):
 # Task model that will be stored in the database
 class Task(db.Model):
     __tablename__ = "tasks"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     task_desc = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
 

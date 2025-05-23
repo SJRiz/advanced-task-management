@@ -4,6 +4,8 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 from flask_socketio import join_room, leave_room
 from config import app, db, socketio
 from models import Task, User, Group, GroupMember
+from flask_migrate import Migrate
+migrate = Migrate(app, db)
 
 # Used to hash passwords
 bcrypt = Bcrypt(app)
