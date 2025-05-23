@@ -22,6 +22,11 @@ class Group(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "members": [
+                {
+                    "email": member.user.email
+                } for member in self.members
+            ]
         }
 
 # Group member model that is part of the group model

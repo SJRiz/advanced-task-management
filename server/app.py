@@ -208,7 +208,10 @@ def create_task(group_id):
         db.session.add(new_task)
         db.session.commit()
 
-        socketio.emit('task_changed', room=str(group_id))
+        user = User.query.get(user_id)
+        socketio.emit('task_changed', {
+            'userEmail': user.email
+        }, room=str(group_id))
 
         return jsonify({
             "id": new_task.id,
@@ -233,7 +236,10 @@ def update_task(group_id, id):
         task.completed = request.json.get("completed", task.completed)
         db.session.commit()
 
-        socketio.emit('task_changed', room=str(group_id))
+        user = User.query.get(user_id)
+        socketio.emit('task_changed', {
+            'userEmail': user.email
+        }, room=str(group_id))
 
         return jsonify(task.to_dict()), 200
     
@@ -254,7 +260,10 @@ def delete_task(group_id, id):
         db.session.delete(task)
         db.session.commit()
 
-        socketio.emit('task_changed', room=str(group_id))
+        user = User.query.get(user_id)
+        socketio.emit('task_changed', {
+            'userEmail': user.email
+        }, room=str(group_id))
 
         return jsonify({})
     

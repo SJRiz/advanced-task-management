@@ -8,6 +8,7 @@ import { io } from 'socket.io-client'
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([])
+  const [notification, setNotification]= useState('')
   const location = useLocation()
   const groupId = location.state?.groupId
   const navigate = useNavigate()
@@ -27,11 +28,15 @@ export default function Tasks() {
     socket.emit('join_group', {group_id: groupId})
 
     // When any tasks are added to the server, refetch
-    socket.on('task_changed', () => {
+    socket.on('task_changed', (data) => {
        api.get(`/groups/${groupId}/tasks`)
       .then(res => setTasks(res.data.tasks))
       .catch(err => console.log(err))
       console.log("change detected")
+
+      const { userEmail } = data
+      setNotification(`${userEmail} made a change to the tasklist`)
+      setTimeout(() => setNotification(''),3000)
     })
 
     return () => {
@@ -61,6 +66,7 @@ export default function Tasks() {
   return (
     <div>
       <TaskForm addTask={addTask} />
+      {notification}
       <TaskList tasks={tasks} editTask={editTask} />
       <p className='mb-2'>Group ID: {groupId} </p>
       <button id="btn" onClick={exit}>Back</button>
