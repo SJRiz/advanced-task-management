@@ -40,7 +40,7 @@ class GroupMember(db.Model):
     __tablename__ = "group_members"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=True)
 
     user = db.relationship("User", backref="group_memberships")
     group = db.relationship("Group", backref="members")
