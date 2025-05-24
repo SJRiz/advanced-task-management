@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 from flask import request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -274,8 +277,6 @@ def delete_task(group_id, id):
         return jsonify({"message": str(err)}), 400
 
 if __name__ == "__main__":
-    import eventlet
-    eventlet.monkey_patch()
 
     with app.app_context():
         db.create_all()
