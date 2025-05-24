@@ -18,6 +18,6 @@ app.config["JWT_SECRET_KEY"] = os.environ["SECRET_KEY"]
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE"]
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode='eventlet', cors_allowed_origins="*")
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
