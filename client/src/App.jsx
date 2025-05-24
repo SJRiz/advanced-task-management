@@ -17,6 +17,11 @@ function App() {
     if (email) {
       setSavedEmail("Hello, " + localStorage.getItem("email"))
     }
+
+    if (isLoggedIn && (location.pathname === "/login" || location.pathname === "/register")) {
+      navigate("/")
+    }
+
   }, [])
 
   const handleLogout = () => {
