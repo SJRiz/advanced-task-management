@@ -103,7 +103,7 @@ def get_groups():
         return jsonify({"groups": groups})
     
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong"}), 400
 
 # Post method to create a new group
 @app.route("/groups", methods=["POST"])
@@ -129,7 +129,7 @@ def create_group():
         return jsonify({"group": new_group.to_dict()}), 201
     
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
 
 # Post method to join a group (create a new group member)
 @app.route("/groups/<int:id>", methods=["POST"])
@@ -154,7 +154,7 @@ def join_group(id):
         return jsonify({"message": "Success"}), 201
 
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
     
 # Delete method to leave a group (remove a group member)
 @app.route("/groups/<int:id>", methods=["DELETE"])
@@ -178,7 +178,7 @@ def leave_group(id):
         return jsonify({"message": "Success"}), 204
 
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
 
 ############################## TASK API ##################################
 # Get/Read method to get all the tasks made by a group
@@ -194,7 +194,7 @@ def get_tasks(group_id):
         return jsonify({"tasks": tasks_list})
     
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
 
     
 # Post/Create method to create a task associated with the user
@@ -225,7 +225,7 @@ def create_task(group_id):
         }), 201
     
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
 
 # Patch/Update method to update a task description
 @app.route("/groups/<int:group_id>/tasks/<int:id>", methods=["PATCH"])
@@ -250,7 +250,7 @@ def update_task(group_id, id):
         return jsonify(task.to_dict()), 200
     
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
 
 # Delete method to delete a task associated with a user
 @app.route("/groups/<int:group_id>/tasks/<int:id>", methods=["DELETE"])
@@ -274,7 +274,7 @@ def delete_task(group_id, id):
         return jsonify({})
     
     except Exception as err:
-        return jsonify({"message": str(err)}), 400
+        return jsonify({"message": "Something went wrong. Try again later"}), 400
 
 if __name__ == "__main__":
 
