@@ -6,10 +6,12 @@ import Register from "./pages/Register";
 import Groups from './pages/Groups';
 
 function App() {
+  // Save the email and login as a state
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"))
   const [savedEmail, setSavedEmail] = useState("Please Log In.")
   const navigate = useNavigate()
 
+  // Every time the page loads, or the logged in state changes, redirect to groups page
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem("token"))
 
@@ -22,8 +24,9 @@ function App() {
       navigate("/")
     }
 
-  }, [])
+  }, [isLoggedIn, location.pathname])
 
+  // Function to log the user out, and send them to log in page
   const handleLogout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("email")
@@ -41,10 +44,12 @@ function App() {
         bg-gradient-to-tr from-gray-900 to-gray-950 transform transition-transform duration-300 ease-in-out hover:scale-102">
         <nav className="bg-gray-900 rounded-3xl p-1 border-1 mb-5 border-gray-600">
           {isLoggedIn ? (
+            // If logged in, show the logout button only
             <button onClick={handleLogout}
             className=" w-87 rounded-3xl"
             id='btn'>Log Out</button>
           ) : (
+            // Else, show the navigation to register and log in
             <>
             <Link to="/register">Register </Link>
             | <Link to="/login">Log In</Link>
