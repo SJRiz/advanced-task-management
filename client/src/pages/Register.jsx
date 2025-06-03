@@ -5,10 +5,14 @@ import { useNavigate } from "react-router-dom";
 export default function Register() {
     const navigate = useNavigate();
 
+    // useState for the email and password field
     const [form, setForm] = useState({ email: "", password: "" });
+
+    // useState for the error message
     const [error, setError] = useState("");
 
     const handleChange = (e) => {
+        // Change whatever field was edited on the form
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
@@ -29,7 +33,8 @@ export default function Register() {
     <div className='p-6 mt-20 border-t border-b border-gray-600'>
         <h2 className=' text-5xl'>Register</h2>
         <br/>
-        {error && <p>{error}</p>}
+        {// Show the error messgae if there is one
+        error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
             <input
                 className="bg-white text-black rounded-2xl text-center mb-3 mt-10"
